@@ -1,5 +1,7 @@
 # ShortURL
 
+<a href="https://github.com/Atharva21/shortURL/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="license"/></a>
+
 A URL Shortner created using GoLang and Redis
 
 ![screen-capture__2__AdobeExpress](https://user-images.githubusercontent.com/35420813/177477122-644254f4-6dab-40f9-b349-11703d9db230.gif)
