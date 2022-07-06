@@ -1,3 +1,6 @@
 # shortURL
 An app that shortens long URLs
-![shortURL](https://user-images.githubusercontent.com/35420813/177474900-d8141490-4916-4479-90ff-345a9a58b3cf.gif)
+
+
+
+![screen-capture__2__AdobeExpress](https://user-images.githubusercontent.com/35420813/177477122-644254f4-6dab-40f9-b349-11703d9db230.gif)
