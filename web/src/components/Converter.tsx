@@ -112,7 +112,7 @@ const Converter: React.FC<ConverterProps> = () => {
 
 	const copyHandler = () => {
 		if (outputRef == null || outputRef.current == null) return;
-		navigator.clipboard.writeText(outputRef.current?.value);
+		navigator.clipboard.writeText(outputRef.current.value);
 		setCopied(true);
 	};
 
