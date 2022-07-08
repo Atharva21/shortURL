@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	ShortURL = "SHORTURL"
-	LongURL  = "LONGURL"
+	shortURLPrefix = "SHORTURL"
+	longURLPrefix  = "LONGURL"
 )
 
 var redisClient *redis.Client
@@ -30,28 +30,33 @@ func init() {
 	log.Println("Connected to redis")
 }
 
-func CheckIfShortURLAbsent(url string) (bool, error) {
-	ok, err := redisClient.HExists(ctx, ShortURL, url).Result()
-	if err != nil || ok {
-		return false, fmt.Errorf("error while querying redis")
+func CheckIfShortURLAbsent(shortURL string) (bool, error) {
+	shortKey := fmt.Sprintf("%s:%s", shortURLPrefix, shortURL)
+	_, err := redisClient.Get(ctx, shortKey).Result()
+	if err != nil {
+		return true, nil
+	}
+	return false, nil
+}
+
+func CheckIfLongURLPresent(longURL string) (bool, error) {
+	longKey := fmt.Sprintf("%s:%s", longURLPrefix, longURL)
+	_, err := redisClient.Get(ctx, longKey).Result()
+	if err != nil {
+		return false, nil
 	}
 	return true, nil
 }
 
-func CheckIfLongURLPresent(url string) (bool, error) {
-	ok, err := redisClient.HExists(ctx, LongURL, url).Result()
-	if err != nil {
-		return false, fmt.Errorf("error while querying redis")
-	}
-	return ok, nil
-}
-
 func Link(shortURL, longURL string) error {
-	_, err := redisClient.HSet(ctx, ShortURL, shortURL, longURL).Result()
+	shortKey := fmt.Sprintf("%s:%s", shortURLPrefix, shortURL)
+	log.Println("ttl is:", util.Config.TTL)
+	_, err := redisClient.Set(ctx, shortKey, longURL, util.Config.TTL).Result()
 	if err != nil {
 		return err
 	}
-	_, err = redisClient.HSet(ctx, LongURL, longURL, shortURL).Result()
+	longKey := fmt.Sprintf("%s:%s", longURLPrefix, longURL)
+	_, err = redisClient.Set(ctx, longKey, shortURL, util.Config.TTL).Result()
 	if err != nil {
 		return err
 	}
@@ -59,17 +64,19 @@ func Link(shortURL, longURL string) error {
 }
 
 func GetShortURL(longURL string) (string, error) {
-	val, err := redisClient.HGet(ctx, LongURL, longURL).Result()
+	longKey := fmt.Sprintf("%s:%s", longURLPrefix, longURL)
+	shortURL, err := redisClient.Get(ctx, longKey).Result()
 	if err != nil {
 		return "", err
 	}
-	return val, nil
+	return shortURL, nil
 }
 
 func GetLongURL(shortURL string) (string, error) {
-	val, err := redisClient.HGet(ctx, ShortURL, shortURL).Result()
+	shortKey := fmt.Sprintf("%s:%s", shortURLPrefix, shortURL)
+	longURL, err := redisClient.Get(ctx, shortKey).Result()
 	if err != nil {
 		return "", err
 	}
-	return val, nil
+	return longURL, nil
 }

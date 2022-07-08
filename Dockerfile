@@ -8,8 +8,9 @@ RUN npm run build
 # build backend
 FROM golang:alpine3.10 as BACKEND
 WORKDIR /app
+COPY backend/go.* .
+RUN go get ./...
 COPY backend/ .
 COPY --from=WEB /web/build/ ./build
-RUN go get ./...
 CMD [ "go", "run", "." ]
  

@@ -3,6 +3,7 @@ package util
 import (
 	"os"
 	"strconv"
+	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -12,6 +13,7 @@ type configType struct {
 	RedisHost    string
 	RedisPort    string
 	EncodeLength int
+	TTL          time.Duration
 }
 
 var Config *configType
@@ -26,4 +28,9 @@ func init() {
 		encodeLength = 8
 	}
 	Config.EncodeLength = encodeLength
+	ttl, err := strconv.Atoi(os.Getenv("TTL"))
+	if err != nil {
+		ttl = 3600
+	}
+	Config.TTL = time.Duration(ttl) * time.Second
 }
