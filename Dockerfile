@@ -10,8 +10,8 @@ FROM golang:alpine3.10 as BACKEND
 WORKDIR /app
 COPY backend/go.* .
 RUN go get ./...
-COPY backend/ .
 COPY --from=WEB /web/build/ ./public
+COPY backend/ .
 RUN go build -o bin/app
 CMD [ "./bin/app" ]
  
