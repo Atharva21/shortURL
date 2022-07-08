@@ -37,6 +37,9 @@ const Button = styled.button<{ copied?: boolean }>`
 		margin-left: 0;
 		margin-top: 0.7rem;
 		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 `;
 
@@ -84,6 +87,7 @@ const InputContainer = styled.div`
 `;
 
 const ShortURL = styled.div`
+	width: 100%;
 	margin-top: 1rem;
 `;
 
