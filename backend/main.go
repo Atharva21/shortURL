@@ -17,7 +17,7 @@ type RequestBody struct {
 func main() {
 	router := gin.Default()
 
-	router.Use(static.Serve("/", static.LocalFile("./build", true)))
+	router.Use(static.Serve("/", static.LocalFile("./public", true)))
 
 	router.POST("/encode", func(c *gin.Context) {
 		var requestBody RequestBody

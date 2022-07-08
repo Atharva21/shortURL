@@ -11,6 +11,7 @@ WORKDIR /app
 COPY backend/go.* .
 RUN go get ./...
 COPY backend/ .
-COPY --from=WEB /web/build/ ./build
-CMD [ "go", "run", "." ]
+COPY --from=WEB /web/build/ ./public
+RUN go build -o bin/app
+CMD [ "./bin/app" ]
  
